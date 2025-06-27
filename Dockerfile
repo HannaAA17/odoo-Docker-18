@@ -69,13 +69,13 @@ RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ noble-pgdg main' > /etc/a
 RUN npm install -g rtlcss
 
 # Install Odoo
-COPY ./odoo.deb ./odoo.deb
+COPY ./build_assets/odoo.deb ./odoo.deb
 RUN apt-get update \
     && apt-get -y install --no-install-recommends ./odoo.deb \
     && rm -rf /var/lib/apt/lists/* odoo.deb
 
 # Copy entrypoint script and Odoo configuration file
-COPY ./entrypoint.sh /
+COPY build_assets/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # COPY ./etc/odoo.conf /etc/odoo/odoo.conf
@@ -93,7 +93,7 @@ EXPOSE 8069 8071 8072
 # Set the default config file
 ENV ODOO_RC /etc/odoo/odoo.conf
 
-COPY wait-for-psql.py /usr/local/bin/wait-for-psql.py
+COPY build_assets/wait-for-psql.py /usr/local/bin/wait-for-psql.py
 RUN chmod +x /usr/local/bin/wait-for-psql.py
 
 # Set default user when running the container
